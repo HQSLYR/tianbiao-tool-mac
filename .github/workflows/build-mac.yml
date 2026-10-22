@@ -12,12 +12,10 @@ jobs:
   build:
     strategy:
       matrix:
-        # 同时产出两种芯片：Apple  Silicon(arm64) 与 Intel(x86_64)
+        # 只构 Apple 芯片 (arm64：M1/M2/M3/M4)
         include:
-          - os: macos-14     # Apple 芯片 (M1/M2/M3)
+          - os: macos-14     # Apple 芯片
             arch: arm64
-          - os: macos-13     # Intel 芯片
-            arch: x86_64
     runs-on: ${{ matrix.os }}
 
     steps:
