@@ -1,0 +1,52 @@
+name: 构建 macOS 填表工具
+
+# 触发方式：手动点按钮 / 推送到 main / 打 tag 均可
+on:
+  workflow_dispatch:
+  push:
+    branches: [ main ]
+    tags: [ 'v*' ]
+  # 也可只在需要时手动触发，避免每次 push 都跑
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        # 同时产出两种芯片：Apple  Silicon(arm64) 与 Intel(x86_64)
+        include:
+          - os: macos-14     # Apple 芯片 (M1/M2/M3)
+            arch: arm64
+          - os: macos-13     # Intel 芯片
+            arch: x86_64
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: 安装 Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: 安装依赖与打包工具
+        working-directory: src
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install pyinstaller
+
+      - name: 打包 .app
+        working-directory: src
+        run: pyinstaller --noconfirm 填表工具_mac.spec
+
+      - name: 压缩产物
+        working-directory: src/dist
+        run: |
+          ditto -c -k --sequesterRsrc --keepParent "填表工具.app" "TianBiaoTool-${{ matrix.arch }}.zip"
+
+      - name: 上传下载链接(Artifact)
+        uses: actions/upload-artifact@v4
+        with:
+          name: TianBiaoTool-macOS-${{ matrix.arch }}
+          path: src/dist/TianBiaoTool-${{ matrix.arch }}.zip
+          if-no-files-found: error

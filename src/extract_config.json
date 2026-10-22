@@ -1,0 +1,19 @@
+{
+  "_说明": "Word 扫描填表配置。改 fields 即可增删字段，无需改代码。",
+  "_字段说明": {
+    "name": "表格里显示的字段名（需与 Excel 表头文字一致，或靠 labels 别名匹配）",
+    "labels": "在源 Word 里用于定位的标签/关键词，可写多个别名，按顺序匹配",
+    "mode": "inline=同一行'标签:值'；block=标签独占一行、值在下方正文；auto=先inline后block",
+    "default": "（可选）没提取到时填的默认值",
+    "max_lines": "（可选，block模式）向下最多取多少行"
+  },
+
+  "source_docx": "示例源文档.docx",
+  "excel_template": "课程提交信息表.xlsx",
+  "excel_output": "课程提交信息表-已填写.xlsx",
+
+  "fields": [
+    { "name": "提交人",   "labels": ["提交人", "姓名", "提交人姓名"], "mode": "inline" },
+    { "name": "课程编号", "labels": ["课程编号", "课程号", "编号"],   "mode": "inline" }
+  ]
+}

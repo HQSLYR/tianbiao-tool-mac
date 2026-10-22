@@ -1,0 +1,10 @@
+# Python / 构建产物
+__pycache__/
+*.pyc
+.venv/
+src/build/
+src/dist/
+src/*.egg-info/
+
+# 系统
+.DS_Store
